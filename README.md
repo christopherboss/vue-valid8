@@ -1,15 +1,15 @@
-# Vue Valid
+# Vue Valid8
 A simple form validation package made for Vue.js.
 
 ## Installation
-`npm install vue-valid@latest --save`
+`npm install vue-valid8@latest --save`
 
 ## Getting Started
 ```js
 import { createApp } from 'vue';
-import VueValid from 'vue-valid';
+import VueValid8 from 'vue-valid8';
 
-createApp().use(VueValid);
+createApp().use(VueValid8);
 ```
 
 ## Usage
@@ -114,7 +114,7 @@ If you want to validate any rules (including custom rules) multi-line (with some
 ### Extending Rules
 If you have custom rules that aren't a part of the rules that come with the package, you can extend your own.
 ```js
-import { extend } from 'vue-valid';
+import { extend } from 'vue-valid8';
 
 extend({
     message: 'This field must be a valid MAC address.',
