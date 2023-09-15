@@ -1,0 +1,24 @@
+{
+  "name": "vue-valid",
+  "version": "1.0.0",
+  "description": "A simple form validation package made for Vue.js.",
+  "main": "scripts/index",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christopherboss/vue-valid"
+  },
+  "keywords": [
+    "vue",
+    "valid",
+    "validate",
+    "validation"
+  ],
+  "author": "Christopher Boss",
+  "license": "ISC",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "vue": "^3.0.5"
+  }
+}
