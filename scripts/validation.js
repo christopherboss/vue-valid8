@@ -74,10 +74,13 @@ export async function validateAll (scope) {
         fieldsToValidate = Object.keys(fields);
     }
 
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve) => {
         fieldsToValidate.forEach((field, index, array) => {
             document.getElementsByName(field)[0]
                 .dispatchEvent(new Event('input'));
+
+            document.getElementsByName(field)[0]
+                .dispatchEvent(new Event('change'));
 
             if (index === array.length - 1)
                 resolve();
