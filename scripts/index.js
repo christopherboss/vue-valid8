@@ -22,7 +22,6 @@ export default {
             beforeMount: function (el, binding) {
                 if (binding.value?.pattern || binding.value) {
                     fields[el.getAttribute('name')] = true;
-
                     el.addEventListener(listenerType(binding), () => validate(el, binding));
                 }
 
@@ -46,7 +45,7 @@ export default {
                 if (oldPattern !== newPattern) {
                     el.removeEventListener(listenerType(binding), () => validate(el, binding));
 
-                    if (pattern) {
+                    if (newPattern) {
                         fields[el.getAttribute('name')] = true;
                         el.addEventListener(listenerType(binding), () => validate(el, binding));
                     }
@@ -67,9 +66,7 @@ export default {
                 }
             },
             beforeUnmount: function (el, binding) {
-                const pattern = binding.value?.pattern || binding.value;
-
-                if (pattern) {
+                if (binding.value?.pattern || binding.value) {
                     delete fields[el.getAttribute('name')];
                     el.removeEventListener(listenerType(binding), () => validate(el, binding));
                 }
