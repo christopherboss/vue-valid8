@@ -50,6 +50,13 @@ export default {
                         el.addEventListener(listenerType(binding), () => validate(el, binding));
                     }
                 }
+
+                if (binding.value?.mask !== binding.oldValue?.mask) {
+                    el.removeEventListener('input', (event) => event.data && mask(el, binding));
+
+                    if (binding.value.mask)
+                        el.addEventListener('input', (event) => event.data && mask(el, binding));
+                }
             },
             updated: function (el, binding) {
                 const newPattern = binding.value?.pattern || binding.value,
@@ -72,7 +79,7 @@ export default {
                 }
 
                 if (binding.value?.mask)
-                    el.removeEventListener('input', () => mask(el, binding));
+                    el.removeEventListener('input', (event) => event.data && mask(el, binding));
             }
         });
     }

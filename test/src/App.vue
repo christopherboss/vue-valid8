@@ -160,7 +160,7 @@
         <input name="phone-number"
             type="text"
             v-model="phoneNumber"
-            v-validate="{ mask: '(###) ###-####', pattern: 'telephone' }"
+            v-validate="{ mask: mask, pattern: 'telephone' }"
         >
         <span class="invalid"
             v-if="validator.invalid('phone-number')"
@@ -232,6 +232,7 @@
                     value: ''
                 },
                 macAddress: '',
+                mask: '(###) ###-####',
                 name: '',
                 notes: '',
                 phoneNumber: '',
