@@ -111,20 +111,6 @@
             {{ validator.message('summary') }}
         </span>
     </div>
-    <h2>Masking</h2>
-    <div class="row">
-        <label>Phone Number: </label>
-        <input name="phone-number"
-            type="text"
-            v-model="phoneNumber"
-            v-validate="{ mask: '(###) ###-####', pattern: 'telephone' }"
-        >
-        <span class="invalid"
-            v-if="validator.invalid('phone-number')"
-        >
-            {{ validator.message('phone-number') }}
-        </span>
-    </div>
     <h2>Custom Regex</h2>
     <div class="row">
         <label>Age: </label>
@@ -149,6 +135,37 @@
             v-if="validator.invalid('ages')"
         >
             {{ validator.message('ages') }}
+        </span>
+    </div>
+    <h2>Lazy</h2>
+    <div class="row">
+        <label>Street Number: </label>
+        <input name="street-number"
+            scope="street-number"
+            type="text"
+            v-model="streetNumber"
+            v-validate.lazy="'required|numeric'"
+        >
+        <span class="invalid"
+            v-if="validator.invalid('street-number')"
+        >
+            {{ validator.message('street-number') }}
+        </span>
+        <br />
+        <button v-on:click="submit()">Submit</button>
+    </div>
+    <h2>Masking</h2>
+    <div class="row">
+        <label>Phone Number: </label>
+        <input name="phone-number"
+            type="text"
+            v-model="phoneNumber"
+            v-validate="{ mask: '(###) ###-####', pattern: 'telephone' }"
+        >
+        <span class="invalid"
+            v-if="validator.invalid('phone-number')"
+        >
+            {{ validator.message('phone-number') }}
         </span>
     </div>
     <separate-template></separate-template>
@@ -219,9 +236,18 @@
                 notes: '',
                 phoneNumber: '',
                 state: '',
+                streetNumber: '',
                 summary: ''
             };
         },
+        methods: {
+            submit: function () {
+                this.validator.validateAll('street-number').then((result) => {
+                    if (result)
+                        console.log('Validated!')
+                });
+            }
+        }
     };
 </script>
 
