@@ -5,6 +5,10 @@ export function extend (rule) {
     add(rule);
 };
 
+function listenerType (binding) {
+    return binding.modifiers?.lazy ? 'change' : 'input';
+}
+
 export default {
     install: function (app) {
         app.provide('validator', {
@@ -18,7 +22,8 @@ export default {
             beforeMount: function (el, binding) {
                 if (binding.value?.pattern || binding.value) {
                     fields[el.getAttribute('name')] = true;
-                    el.addEventListener('input', () => validate(el, binding));
+
+                    el.addEventListener(listenerType(binding), () => validate(el, binding));
                 }
 
                 if (binding.value?.mask)
@@ -39,11 +44,11 @@ export default {
                     oldPattern = binding.oldValue?.pattern || binding.oldValue;
 
                 if (oldPattern !== newPattern) {
-                    el.removeEventListener('input', () => validate(el, binding));
+                    el.removeEventListener(listenerType(binding), () => validate(el, binding));
 
                     if (pattern) {
                         fields[el.getAttribute('name')] = true;
-                        el.addEventListener('input', () => validate(el, binding));
+                        el.addEventListener(listenerType(binding), () => validate(el, binding));
                     }
                 }
             },
@@ -66,7 +71,7 @@ export default {
 
                 if (pattern) {
                     delete fields[el.getAttribute('name')];
-                    el.removeEventListener('input', () => validate(el, binding));
+                    el.removeEventListener(listenerType(binding), () => validate(el, binding));
                 }
 
                 if (binding.value?.mask)

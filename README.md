@@ -40,6 +40,12 @@ If you want to validate immediately/initially when the user gets to the form, yo
 v-validate.initial="'alpha'"
 ```
 
+### Lazy Valiadtion
+If you want to validate without utilizing the input event listener, you may do so by using the `lazy` modifier. This will allow you to only validate when you mean to, like from a submission button.
+```js
+v-validate.lazy="'required|numeric'"
+```
+
 ### Validate All
 You are also able to validate all fields before something like a submission and stop it, if a validation fails.
 ```js
