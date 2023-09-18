@@ -61,7 +61,7 @@ export default {
                             ? selected && selected.innerText
                             : el.value
 
-                    if (binding.arg === 'initial' || (pattern && value))
+                    if (binding.arg === 'initial' || (newPattern && value))
                         validate(el, binding);
                 }
             },
