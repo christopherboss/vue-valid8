@@ -54,7 +54,7 @@ export default {
                 if (binding.value?.mask !== binding.oldValue?.mask) {
                     el.removeEventListener('input', (event) => event.data && mask(el, binding));
 
-                    if (binding.value.mask)
+                    if (binding.value?.mask)
                         el.addEventListener('input', (event) => event.data && mask(el, binding));
                 }
             },
