@@ -74,7 +74,7 @@ export async function validateAll (scope) {
         fieldsToValidate = Object.keys(fields);
     }
 
-    const promise = new Promise((resolve) => {
+    await new Promise((resolve) => {
         fieldsToValidate.forEach((field, index, array) => {
             document.getElementsByName(field)[0]
                 .dispatchEvent(new Event('input'));
@@ -86,8 +86,6 @@ export async function validateAll (scope) {
                 resolve();
         });
     });
-
-    await promise;
     
     return !fieldsToValidate.map((field) => typeof fields[field] === 'string')
         .includes(true);

@@ -1,8 +1,8 @@
 import { add } from './rules.js';
 import { fields, invalid, mask, message, validate, validateAll } from './validation.js';
 
-let bind = undefined,
-    element = undefined;
+let maskController = new AbortController(),
+    validateController = new AbortController();
 
 export function extend (rule) {
     add(rule);
@@ -10,19 +10,6 @@ export function extend (rule) {
 
 function listenerType (binding) {
     return binding.modifiers?.lazy ? 'change' : 'input';
-}
-
-function maskListener (event) {
-    event.data && mask(element, bind);
-}
-
-function setVariables (el, binding) {
-    bind = binding;
-    element = el;
-}
-
-function validateListener () {
-    validate(element, bind);
 }
 
 export default {
@@ -35,20 +22,16 @@ export default {
         });
 
         app.directive('validate', {
-            beforeMount: function (el, binding) {
-                setVariables(el, binding);
-                
+            beforeMount: function (el, binding) {       
                 if (binding.value?.pattern || binding.value) {
                     fields[el.getAttribute('name')] = true;
-                    el.addEventListener(listenerType(binding), validateListener);
+                    el.addEventListener(listenerType(binding), () => validate(el, binding), { signal: validateController.signal });
                 }
 
                 if (binding.value?.mask)
-                    el.addEventListener('input', maskListener);
+                    el.addEventListener('input', (event) => event.data && mask(el, binding), { signal: maskController.signal });
             },
             mounted: function (el, binding) {
-                setVariables(el, binding);
-
                 const pattern = binding.value?.pattern || binding.value,
                     selected = el.getElementsByClassName('selected')[0],
                     value = el.classList.contains('select')
@@ -59,30 +42,29 @@ export default {
                     validate(el, binding);
             },
             beforeUpdate: function (el, binding) {
-                setVariables(el, binding);
-
                 const newPattern = binding.value?.pattern || binding.value,
                     oldPattern = binding.oldValue?.pattern || binding.oldValue;
 
                 if (oldPattern !== newPattern) {
-                    el.removeEventListener(listenerType(binding), validateListener);
+                    validateController.abort();
 
                     if (newPattern) {
                         fields[el.getAttribute('name')] = true;
-                        el.addEventListener(listenerType(binding), validateListener);
+                        validateController = new AbortController();
+                        el.addEventListener(listenerType(binding), () => validate(el, binding), { signal: validateController.signal });
                     }
                 }
 
                 if (binding.value?.mask !== binding.oldValue?.mask) {
-                    el.removeEventListener('input', maskListener);
+                    maskController.abort();
 
-                    if (binding.value?.mask)
-                        el.addEventListener('input', maskListener);
+                    if (binding.value?.mask) {
+                        maskController = new AbortController();
+                        el.addEventListener('input', (event) => event.data && mask(el, binding), { signal: maskController.signal });
+                    }
                 }
             },
             updated: function (el, binding) {
-                setVariables(el, binding);
-
                 const newPattern = binding.value?.pattern || binding.value,
                     oldPattern = binding.oldValue?.pattern || binding.oldValue;
 
@@ -97,15 +79,13 @@ export default {
                 }
             },
             beforeUnmount: function (el, binding) {
-                setVariables(el, binding);
-
                 if (binding.value?.pattern || binding.value) {
                     delete fields[el.getAttribute('name')];
-                    el.removeEventListener(listenerType(binding), validateListener);
+                    validateController.abort();
                 }
 
                 if (binding.value?.mask)
-                    el.removeEventListener('input', maskListener);
+                    maskController.abort();
             }
         });
     }
