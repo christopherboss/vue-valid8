@@ -77,7 +77,14 @@ export async function validateAll (scope) {
     await new Promise((resolve) => {
         fieldsToValidate.forEach((field, index, array) => {
             document.getElementsByName(field)[0]
-                .dispatchEvent(new Event(fields[field]?.lazy ? 'change' : 'input'));
+                .dispatchEvent(
+                    new Event(
+                        fields[field]?.lazy || 
+                        document.getElementsByName(field)[0]?.type === 'select-one' ? 
+                            'change' : 
+                            'input'
+                    )
+                );
 
             if (index === array.length - 1)
                 resolve();
@@ -89,6 +96,5 @@ export async function validateAll (scope) {
 }
 
 function validateRule (rule, value) {
-    console.log(rule, rule.replace(/\:.*/, ''))
     return rules[rule.replace(/\:.*/, '')](value, rule.replace(/^(.*?)\:/, ''));
 }

@@ -9,7 +9,7 @@ export function extend (rule) {
 };
 
 function listenerType (binding, el) {
-    return binding.modifiers?.lazy ? 'change' : 'input';
+    return binding.modifiers?.lazy || el?.type === 'select-one' ? 'change' : 'input';
 }
 
 export default {
