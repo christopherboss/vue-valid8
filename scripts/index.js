@@ -8,7 +8,7 @@ export function extend (rule) {
     add(rule);
 };
 
-function listenerType (binding) {
+function listenerType (binding, el) {
     return binding.modifiers?.lazy ? 'change' : 'input';
 }
 
@@ -22,10 +22,14 @@ export default {
         });
 
         app.directive('validate', {
-            beforeMount: function (el, binding) {       
+            beforeMount: function (el, binding) {                
                 if (binding.value?.pattern || binding.value) {
-                    fields[el.getAttribute('name')] = true;
-                    el.addEventListener(listenerType(binding), () => validate(el, binding), { signal: validateController.signal });
+                    fields[el.getAttribute('name')] = { 
+                        lazy: binding.modifiers?.lazy || false, 
+                        message: true 
+                    };
+
+                    el.addEventListener(listenerType(binding, el), () => validate(el, binding), { signal: validateController.signal });
                 }
 
                 if (binding.value?.mask)

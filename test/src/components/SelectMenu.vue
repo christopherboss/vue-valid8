@@ -1,29 +1,27 @@
 <template>
     <div class="select"
-         :class="{ open }"
-         :value="modelValue"
-         v-on:click="open = !open"
+        :class="{ open }"
+        :value="modelValue"
+        v-on:click="open = !open"
     >
         <span :class="{ placeholder: !modelValue, selected: modelValue }"
-              v-show="!open"
+            v-show="!open"
         >
             {{ modelValue.label || placeholder }}
         </span>
-
         <span class="chevron"
-              v-if="open"
+            v-if="open"
         >
             ▴
         </span>
         <span class="chevron"
-              v-else
+            v-else
         >
             ▾
         </span>
-
         <div class="dropdown"
-             ref="dropdown"
-             v-if="open"
+            ref="dropdown"
+            v-if="open"
         >
             <ul>
                 <li :class="{ selected: modelValue === option }"
