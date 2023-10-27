@@ -22,7 +22,7 @@ export default {
         });
 
         app.directive('validate', {
-            beforeMount: function (el, binding) {                
+            beforeMount: function (el, binding) {
                 if (binding.value?.pattern || binding.value) {
                     fields[el.getAttribute('name')] = { 
                         lazy: binding.modifiers?.lazy || false, 

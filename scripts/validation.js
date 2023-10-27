@@ -68,11 +68,14 @@ export async function validateAll (scope) {
     if (scope) {
         document.querySelectorAll(`[scope="${scope}"]`)
             .forEach((field) => { 
-                fieldsToValidate.push(field.getAttribute('name'));
+                if (fields[field.getAttribute('name')])
+                    fieldsToValidate.push(field.getAttribute('name'));
             });
     } else {
         fieldsToValidate = Object.keys(fields);
     }
+
+    console.log(fieldsToValidate)
 
     await new Promise((resolve) => {
         fieldsToValidate.forEach((field, index, array) => {
@@ -91,7 +94,7 @@ export async function validateAll (scope) {
         });
     });
     
-    return !fieldsToValidate.map((field) => typeof fields[field].message === 'string')
+    return !fieldsToValidate.map((field) => typeof fields[field]?.message === 'string')
         .includes(true);
 }
 

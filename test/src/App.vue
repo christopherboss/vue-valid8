@@ -59,8 +59,10 @@
     <div class="row">
         <label>State: </label>
         <select name="state"
+            scope="street-number"
             v-model="state"
-            v-validate="'required'"
+            v-on:change="$event.isTrusted && test()"
+            v-validate="''"
         >
             <option>NJ</option>
             <option>NY</option>
@@ -89,7 +91,9 @@
         <label>Favorite Color: </label>
         <select-menu name="color"
             :options="color.options"
+            scope="street-number"
             v-model="color.value"
+            v-on:change="test()"
             v-validate="'required'"
         >
         </select-menu>
@@ -160,7 +164,7 @@
         <input name="phone-number"
             type="text"
             v-model="phoneNumber"
-            v-validate="{ mask: mask, pattern: 'telephone' }"
+            v-validate="{ mask: mask }"
         >
         <span class="invalid"
             v-if="validator.invalid('phone-number')"
@@ -232,7 +236,7 @@
                     value: ''
                 },
                 macAddress: '',
-                mask: '(###) ###-####',
+                mask: '##:##:##:##:##:##',
                 name: '',
                 notes: '',
                 phoneNumber: '',
@@ -247,6 +251,9 @@
                     if (result)
                         console.log('Validated!')
                 });
+            },
+            test: function () {
+                console.log('test');
             }
         }
     };
