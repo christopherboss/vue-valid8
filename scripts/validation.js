@@ -65,17 +65,14 @@ export function validate (el, binding) {
 export async function validateAll (scope) {
     let fieldsToValidate = [];
 
-    if (scope) {
+    if (scope)
         document.querySelectorAll(`[scope="${scope}"]`)
             .forEach((field) => { 
                 if (fields[field.getAttribute('name')])
                     fieldsToValidate.push(field.getAttribute('name'));
             });
-    } else {
+    else
         fieldsToValidate = Object.keys(fields);
-    }
-
-    console.log(fieldsToValidate)
 
     await new Promise((resolve) => {
         fieldsToValidate.forEach((field, index, array) => {
