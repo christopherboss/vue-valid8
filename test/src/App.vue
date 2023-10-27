@@ -117,7 +117,7 @@
         <input name="age"
             type="text"
             v-model="age"
-            v-validate="String.raw`required|regex:/^\(?\d{3}\)?\s?[-.|_]?\d{3}[-.|_]?\d{4}$/`"
+            v-validate="String.raw`required|regex:/^(0|[1-9][0-9]*)$/`"
         >
         <span class="invalid"
             v-if="validator.invalid('age')"

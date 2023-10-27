@@ -4,7 +4,7 @@ import { rules } from './rules.js';
 export const fields = reactive({});
 
 export function invalid (name) {
-    return typeof fields[name] === 'string';
+    return typeof fields[name]?.message === 'string';
 }
 
 export function mask (el, binding) {
@@ -32,7 +32,7 @@ export function mask (el, binding) {
 }
 
 export function message (name) {
-    return fields[name];
+    return fields[name].message;
 }
 
 function multi (rule, value) {
@@ -58,7 +58,7 @@ export function validate (el, binding) {
                 )
                 .find((message) => message !== true);
 
-        fields[el.getAttribute('name')] = !required && !value || validation;
+        fields[el.getAttribute('name')].message = !required && !value || validation;
     });
 }
 
@@ -77,17 +77,21 @@ export async function validateAll (scope) {
     await new Promise((resolve) => {
         fieldsToValidate.forEach((field, index, array) => {
             document.getElementsByName(field)[0]
-                .dispatchEvent(new Event('input'));
-
-            document.getElementsByName(field)[0]
-                .dispatchEvent(new Event('change'));
+                .dispatchEvent(
+                    new Event(
+                        fields[field]?.lazy || 
+                        document.getElementsByName(field)[0]?.type === 'select-one' ? 
+                            'change' : 
+                            'input'
+                    )
+                );
 
             if (index === array.length - 1)
                 resolve();
         });
     });
     
-    return !fieldsToValidate.map((field) => typeof fields[field] === 'string')
+    return !fieldsToValidate.map((field) => typeof fields[field].message === 'string')
         .includes(true);
 }
 
