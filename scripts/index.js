@@ -53,8 +53,12 @@ export default {
                     validateController.abort();
 
                     if (newPattern) {
-                        fields[el.getAttribute('name')] = true;
+                        fields[el.getAttribute('name')] = { 
+                            lazy: binding.modifiers?.lazy || false, 
+                            message: true 
+                        };
                         validateController = new AbortController();
+                        
                         el.addEventListener(listenerType(binding), () => validate(el, binding), { signal: validateController.signal });
                     }
                 }
