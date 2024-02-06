@@ -23,7 +23,7 @@ export default {
 
         app.directive('validate', {
             beforeMount: function (el, binding) {
-                if (binding.value?.pattern && typeof binding.value !== 'object') {
+                if (binding.value?.pattern || (typeof binding.value !== 'object' && binding.value)) {
                     fields[el.getAttribute('name')] = { 
                         lazy: binding.modifiers?.lazy || false, 
                         message: true 
@@ -87,7 +87,7 @@ export default {
                 }
             },
             beforeUnmount: function (el, binding) {
-                if (binding.value?.pattern && typeof binding.value !== 'object') {
+                if (binding.value?.pattern || (typeof binding.value !== 'object' && binding.value)) {
                     delete fields[el.getAttribute('name')];
                     validateController.abort();
                 }
