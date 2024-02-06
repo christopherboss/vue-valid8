@@ -23,7 +23,7 @@ export default {
 
         app.directive('validate', {
             beforeMount: function (el, binding) {
-                if (binding.value?.pattern || binding.value) {
+                if (binding.value?.pattern && typeof binding.value !== 'object') {
                     fields[el.getAttribute('name')] = { 
                         lazy: binding.modifiers?.lazy || false, 
                         message: true 
@@ -36,7 +36,7 @@ export default {
                     el.addEventListener('input', (event) => event.data && mask(el, binding), { signal: maskController.signal });
             },
             mounted: function (el, binding) {
-                const pattern = binding.value?.pattern || binding.value,
+                const pattern = binding.value?.pattern || (typeof binding.value !== 'object' && binding.value),
                     selected = el.getElementsByClassName('selected')[0],
                     value = el.classList.contains('select')
                         ? selected && selected.innerText
@@ -46,8 +46,8 @@ export default {
                     validate(el, binding);
             },
             beforeUpdate: function (el, binding) {
-                const newPattern = binding.value?.pattern || binding.value,
-                    oldPattern = binding.oldValue?.pattern || binding.oldValue;
+                const newPattern = binding.value?.pattern || (typeof binding.value !== 'object' && binding.value),
+                    oldPattern = binding.oldValue?.pattern || (typeof binding.oldValue !== 'object' && binding.oldValue);
 
                 if (oldPattern !== newPattern) {
                     validateController.abort();
@@ -73,8 +73,8 @@ export default {
                 }
             },
             updated: function (el, binding) {
-                const newPattern = binding.value?.pattern || binding.value,
-                    oldPattern = binding.oldValue?.pattern || binding.oldValue;
+                const newPattern = binding.value?.pattern || (typeof binding.value !== 'object' && binding.value),
+                    oldPattern = binding.oldValue?.pattern || (typeof binding.oldValue !== 'object' && binding.oldValue);
 
                 if (oldPattern !== newPattern) {
                     const selected = el.getElementsByClassName('selected')[0],
@@ -87,7 +87,7 @@ export default {
                 }
             },
             beforeUnmount: function (el, binding) {
-                if (binding.value?.pattern || binding.value) {
+                if (binding.value?.pattern && typeof binding.value !== 'object') {
                     delete fields[el.getAttribute('name')];
                     validateController.abort();
                 }
