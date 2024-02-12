@@ -1,6 +1,6 @@
 {
   "name": "vue-valid8",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "A simple form validation package made for Vue.js.",
   "main": "scripts/index",
   "repository": {

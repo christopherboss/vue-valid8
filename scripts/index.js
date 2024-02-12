@@ -1,8 +1,8 @@
 import { add } from './rules.js';
 import { fields, invalid, mask, message, validate, validateAll } from './validation.js';
 
-let maskController = new AbortController(),
-    validateController = new AbortController();
+let maskController,
+    validateController;
 
 export function extend (rule) {
     add(rule);
@@ -23,6 +23,9 @@ export default {
 
         app.directive('validate', {
             beforeMount: function (el, binding) {
+                maskController = new AbortController();
+                validateController = new AbortController();
+
                 if (binding.value?.pattern || (typeof binding.value !== 'object' && binding.value)) {
                     fields[el.getAttribute('name')] = { 
                         lazy: binding.modifiers?.lazy || false, 
